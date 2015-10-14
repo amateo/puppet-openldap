@@ -18,7 +18,7 @@ Puppet::Type.newtype(:openldap_database) do
 
   newproperty(:backend) do
     desc "The name of the backend."
-    newvalues('bdb', 'hdb', 'mdb', 'monitor')
+    newvalues('bdb', 'hdb', 'mdb', 'monitor', 'ldap')
     defaultto do
       case Facter.value(:osfamily)
       when 'Debian'
@@ -138,7 +138,7 @@ Puppet::Type.newtype(:openldap_database) do
   end
 
   newproperty(:dboptions) do
-    desc "Hash to pass specific HDB/BDB options for the database"
+    desc "Hash to pass specific HDB/BDB/LDAP options for the database"
 
     def insync?(is)
       if resource[:synctype] == :inclusive

@@ -16,7 +16,7 @@ Puppet::Type.type(:openldap_database).provide(:olc) do
       '-b',
       'cn=config',
       '-H',
-      'ldap:///???(|(olcDatabase=monitor)(&(objectClass=olcDatabaseConfig)(|(objectClass=olcBdbConfig)(objectClass=olcHdbConfig)(objectClass=olcMdbConfig)(objectClass=olcMonitorConfig))))'
+      'ldap:///???(|(olcDatabase=monitor)(&(objectClass=olcDatabaseConfig)(|(objectClass=olcBdbConfig)(objectClass=olcHdbConfig)(objectClass=olcMdbConfig)(objectClass=olcMonitorConfig)(objectClass=olcLDAPConfig))))'
     )
     databases.split("\n\n").collect do |paragraph|
       suffix = nil
@@ -37,7 +37,7 @@ Puppet::Type.type(:openldap_database).provide(:olc) do
       paragraph.gsub("\n ", "").split("\n").collect do |line|
         case line
         when /^olcDatabase: /
-          index, backend = line.match(/^olcDatabase: \{(\d+)\}(bdb|hdb|mdb|monitor)$/).captures
+          index, backend = line.match(/^olcDatabase: \{(\d+)\}(bdb|hdb|mdb|monitor|ldap)$/).captures
         when /^olcDbDirectory: /
           directory = line.split(' ')[1]
         when /^olcRootDN: /
