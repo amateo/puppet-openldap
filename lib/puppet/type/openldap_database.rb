@@ -47,8 +47,13 @@ Puppet::Type.newtype(:openldap_database) do
   newproperty(:directory) do
     desc "The directory where the BDB files containing this database and associated indexes live."
     defaultto do
-      if "#{@resource[:backend]}" != "monitor"
+      if "#{@resource[:backend]}" != "monitor" and "#{@resource[:backend]}" != "ldap"
         '/var/lib/ldap'
+      end
+    end
+    validate do |value|
+      if ("#{@resource[:backend]}" == "monitor" or "#{@resource[:backend]}" == "ldap") and value != ""
+        raise ArgumentError, "Invalid option directory: directory option (\"#{value}\") is not allowed for #{@resource[:backend]} backend"
       end
     end
   end
